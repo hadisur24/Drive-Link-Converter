@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveLink Pro | Google Drive Direct Image Link Converter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary-color: #0f172a;
+            --light-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.1);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .logo-icon {
+            color: var(--primary-color);
+            font-size: 32px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-color), #7c3aed);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .input-section {
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            background-color: var(--light-bg);
+            border-radius: var(--radius-md);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .input-icon {
+            padding: 0 16px;
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 16px 0;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .convert-btn {
+            background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 16px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .convert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .convert-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-section {
+            margin-top: 40px;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .url-box {
+            background-color: var(--light-bg);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+            word-break: break-all;
+            position: relative;
+            padding-right: 50px;
+        }
+
+        .url-text {
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .preview-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .preview-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .preview-card {
+            background-color: var(--light-bg);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .preview-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .preview-icon {
+            color: var(--primary-color);
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 200px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            border: 1px solid var(--border-color);
+            background-color: white;
+        }
+
+        .css-preview-box {
+            width: 100%;
+            height: 200px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+        }
+
+        .css-preview-label {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .usage-instructions {
+            background-color: var(--light-bg);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            margin-top: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .usage-instructions h3 {
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .instruction-item {
+            background-color: white;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .instruction-icon {
+            background-color: rgba(79, 70, 229, 0.1);
+            color: var(--primary-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .usage-example {
+            margin-top: 10px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-link logo-icon"></i>
+            </div>
+            <h1>DriveLink Pro</h1>
+            <p class="subtitle">Convert Google Drive links to direct image URLs for use in HTML, React, PDFs, or CSS backgrounds with one click.</p>
+        </header>
+
+        <main>
+            <div class="main-card">
+                <div class="input-section">
+                    <div class="input-group">
+                        <label class="input-label" for="driveLink">
+                            <i class="fas fa-paperclip"></i> Google Drive Link
+                        </label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fab fa-google-drive"></i>
+                            </div>
+                            <input type="text" id="driveLink" placeholder="Paste your Google Drive link here...">
+                        </div>
+                        <p class="usage-example">Example: https://drive.google.com/file/d/1ABC123xyz/view?usp=sharing</p>
+                    </div>
+                    
+                    <button class="convert-btn" id="convertBtn">
+                        <i class="fas fa-magic"></i> Convert & Preview
+                    </button>
+                </div>
+
+                <div class="result-section">
+                    <div class="result-header">
+                        <h2>Direct Image URL</h2>
+                    </div>
+                    
+                    <div class="url-box">
+                        <div class="url-text" id="directUrl">Your direct image URL will appear here...</div>
+                        <button class="copy-btn" id="copyBtn" disabled>
+                            <i class="far fa-copy"></i> Copy
+                        </button>
+                    </div>
+
+                    <div class="preview-section">
+                        <div class="preview-card">
+                            <div class="preview-title">
+                                <i class="fas fa-image preview-icon"></i>
+                                Image Preview
+                            </div>
+                            <div id="imagePreviewContainer">
+                                <div class="empty-state" id="imageEmptyState">
+                                    <i class="far fa-image"></i>
+                                    <p>Image preview will appear here</p>
+                                </div>
+                                <img class="image-preview" id="imagePreview" src="" alt="Preview" style="display: none;">
+                            </div>
+                        </div>
+                        
+                        <div class="preview-card">
+                            <div class="preview-title">
+                                <i class="fas fa-paint-brush preview-icon"></i>
+                                CSS Background Preview
+                            </div>
+                            <div class="css-preview-box" id="backgroundPreview">
+                                <div class="css-preview-label" id="cssEmptyState">CSS background preview</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="usage-instructions">
+                <h3><i class="fas fa-info-circle"></i> How to Use</h3>
+                <div class="instructions-list">
+                    <div class="instruction-item">
+                        <div class="instruction-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h4>Copy Drive Link</h4>
+                        <p>Copy any Google Drive image link (shared link with view permission).</p>
+                    </div>
+                    <div class="instruction-item">
+                        <div class="instruction-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h4>Paste & Convert</h4>
+                        <p>Paste the link into the converter and click "Convert & Preview".</p>
+                    </div>
+                    <div class="instruction-item">
+                        <div class="instruction-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h4>Use Direct URL</h4>
+                        <p>Use the generated direct URL in your HTML, CSS, React, or PDF projects.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>DreamInnovation &copy; 2025 | A professional tool for converting Google Drive links to direct image URLs</p>
+        </footer>
+
+        <div class="notification" id="notification">
+            <i class="fas fa-check-circle"></i>
+            <span>URL copied to clipboard!</span>
+        </div>
+    </div>
+
+    <script>
+        // Utility function: Converts Google Drive link to direct image URL
+        function convertDriveLinkToDirect(url) {
+            if (!url) return "";
+
+            // Extract file ID from /d/ links
+            const regex = /\/d\/(.*?)\//;
+            const match = url.match(regex);
+
+            if (match && match[1]) {
+                const fileId = match[1];
+                return `https://lh3.googleusercontent.com/d/${fileId}=w2000`;
+            }
+
+            // Extract file ID from uc?id= links
+            const altRegex = /id=([^&]+)/;
+            const altMatch = url.match(altRegex);
+
+            if (altMatch && altMatch[1]) {
+                const fileId = altMatch[1];
+                return `https://lh3.googleusercontent.com/d/${fileId}=w2000`;
+            }
+
+            // If no match, return original URL
+            return url;
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.querySelector('span').textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Convert & show preview
+        function convertAndPreview() {
+            const driveLink = document.getElementById('driveLink').value.trim();
+            const directUrl = convertDriveLinkToDirect(driveLink);
+
+            // Show the direct URL
+            const directUrlElement = document.getElementById('directUrl');
+            directUrlElement.textContent = directUrl;
+            directUrlElement.style.color = 'var(--text-primary)';
+
+            // Enable copy button
+            const copyBtn = document.getElementById('copyBtn');
+            copyBtn.disabled = false;
+            copyBtn.innerHTML = '<i class="far fa-copy"></i> Copy';
+
+            // Show image preview
+            const imgPreview = document.getElementById('imagePreview');
+            const imageEmptyState = document.getElementById('imageEmptyState');
+            
+            if (directUrl && directUrl.includes('googleusercontent.com')) {
+                imgPreview.src = directUrl;
+                imgPreview.style.display = 'block';
+                imageEmptyState.style.display = 'none';
+                
+                // Handle image load error
+                imgPreview.onerror = function() {
+                    imgPreview.style.display = 'none';
+                    imageEmptyState.innerHTML = '<i class="fas fa-exclamation-triangle"></i><p>Unable to load image preview</p>';
+                    imageEmptyState.style.display = 'flex';
+                };
+            } else {
+                imgPreview.style.display = 'none';
+                imageEmptyState.innerHTML = '<i class="far fa-image"></i><p>Image preview will appear here</p>';
+                imageEmptyState.style.display = 'flex';
+            }
+
+            // Set as CSS background
+            const bgPreview = document.getElementById('backgroundPreview');
+            const cssEmptyState = document.getElementById('cssEmptyState');
+            
+            if (directUrl && directUrl.includes('googleusercontent.com')) {
+                bgPreview.style.backgroundImage = `url(${directUrl})`;
+                cssEmptyState.style.display = 'none';
+            } else {
+                bgPreview.style.backgroundImage = 'none';
+                cssEmptyState.style.display = 'block';
+            }
+        }
+
+        // Copy URL to clipboard
+        function copyToClipboard() {
+            const directUrlElement = document.getElementById('directUrl');
+            const urlText = directUrlElement.textContent;
+            
+            // Don't copy if it's the placeholder text
+            if (urlText.includes('Your direct image URL')) {
+                showNotification('Please convert a link first');
+                return;
+            }
+            
+            navigator.clipboard.writeText(urlText).then(() => {
+                // Update button to show success
+                const copyBtn = document.getElementById('copyBtn');
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                copyBtn.style.backgroundColor = 'var(--success-color)';
+                
+                showNotification('URL copied to clipboard!');
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    copyBtn.innerHTML = '<i class="far fa-copy"></i> Copy';
+                    copyBtn.style.backgroundColor = '';
+                }, 2000);
+            });
+        }
+
+        // Event listeners
+        document.getElementById('convertBtn').addEventListener('click', convertAndPreview);
+        document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
+
+        // Allow pressing Enter to convert
+        document.getElementById('driveLink').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                convertAndPreview();
+            }
+        });
+
+        // Add example link on click for testing
+        document.getElementById('driveLink').addEventListener('click', function(e) {
+            if (this.value === '') {
+                this.value = 'https://drive.google.com/file/d/1ABC123xyz/view?usp=sharing';
+            }
+        });
+    </script>
+</body>
+</html>
